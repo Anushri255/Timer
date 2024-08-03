@@ -20,16 +20,7 @@
             margin-top: 70px;
             text-align: center;
         }
-        button {
-            padding: 10px;
-            background-color: #008cba;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 5px;
-        }
+
         .container {
             background: white;
             padding: 20px;
@@ -47,15 +38,76 @@
             width: 60px;
             margin: 5px;
         }
+        button {
+            padding: 10px;
+            background-color: #008cba;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
     </style>
 <head>
     <title>Countdown Timer</title>
 </head>
+<script>
+    let timer;
+    let timeLeft;
+    let timerPaused = false;
+
+    function startTimer() {
+        const minutes = parseInt(document.getElementById('minutesInput').value) || 0;
+        const seconds = parseInt(document.getElementById('secondsInput').value) || 0;
+        timeLeft = (minutes * 60) + seconds;
+
+        if (timeLeft <= 0) {
+            alert('There is no time set - Please set a time.');
+            return;
+        }
+
+        if (timer) {
+            clearInterval(timer);
+        }
+
+        timer = setInterval(() => {
+            if (!timerPaused) {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    displayTime();
+                } else {
+                    clearInterval(timer);
+                    alert('Time is up!');
+                }
+            }
+        }, 1000);
+    }
+
+    function pauseTimer() {
+        timerPaused = !timerPaused;
+    }
+
+    function resetTimer() {
+        clearInterval(timer);
+        document.getElementById('minutesInput').value = '';
+        document.getElementById('secondsInput').value = '';
+        document.getElementById('timer').innerText = '00:00';
+        timerPaused = false;
+    }
+
+    function displayTime() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        document.getElementById('timer').innerText = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+</script>
 <body>
     <div class="banner">Project 2</div>
     <div class="content">
         <h1>Countdown Timer</h1>
     </div>
+
     <div class="container">
         <h1>Project #2</h1>
         <div>
@@ -69,6 +121,6 @@
         </div>
         <div id="timer">00:00</div>
     </div>
-
+            
 </body>
 </html>
